@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DUSCU | Hub Phân Phối</title>
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       LIQUID GLASS AESTHETIC - OBSIDIAN & IRIDESCENT FROSTED GLASS
+       ========================================================================== */
+    :root {
+      --bg-base: #060911;
+      --glass-surface: rgba(16, 24, 42, 0.52);
+      --glass-surface-hover: rgba(22, 34, 58, 0.65);
+      --glass-border: rgba(255, 255, 255, 0.18);
+      --glass-border-hover: rgba(255, 255, 255, 0.42);
+      --glass-highlight: rgba(255, 255, 255, 0.6);
+      --glass-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.55), 0 18px 36px -18px rgba(0, 0, 0, 0.4);
+      --accent-cyan: #38bdf8;
+      --accent-indigo: #818cf8;
+      --text-primary: #ffffff;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: var(--bg-base);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text-primary);
+      position: relative;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Ambient Liquid Glow Orbs (Nền ánh sáng khúc xạ phía sau kính) */
+    .ambient-glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.45;
+      animation: floatOrb 18s ease-in-out infinite alternate;
+    }
+
+    .glow-orb-1 {
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle, #0284c7 0%, rgba(2, 132, 199, 0) 70%);
+      top: -120px;
+      left: 10%;
+    }
+
+    .glow-orb-2 {
+      width: 480px;
+      height: 480px;
+      background: radial-gradient(circle, #4f46e5 0%, rgba(79, 70, 229, 0) 70%);
+      bottom: -100px;
+      right: 15%;
+      animation-delay: -6s;
+    }
+
+    .glow-orb-3 {
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, #059669 0%, rgba(5, 150, 105, 0) 70%);
+      top: 40%;
+      left: 60%;
+      opacity: 0.25;
+      animation-delay: -12s;
+    }
+
+    @keyframes floatOrb {
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+      50% {
+        transform: translate(40px, 30px) scale(1.08);
+      }
+      100% {
+        transform: translate(-30px, -20px) scale(0.95);
+      }
+    }
+
+    /* Khung nội dung chính */
+    .portal-wrapper {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 60px 24px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    /* Thanh Header kính lỏng ghim đỉnh */
+    .glass-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 28px;
+      border-radius: 24px;
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3), inset 0 1px 1px var(--glass-highlight);
+      margin-bottom: 50px;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.3) 0%, rgba(99, 102, 241, 0.3) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6);
+    }
+
+    .brand-logo-badge svg {
+      width: 18px;
+      height: 18px;
+      stroke: #ffffff;
+    }
+
+    .brand-name {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+
+    .brand-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--accent-cyan);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+
+    /* Tiêu đề trang */
+    .hero-section {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .hero-title {
+      font-size: 38px;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      margin-bottom: 14px;
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Lưới 2 phần chính */
+    .portal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .portal-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .hero-title {
+        font-size: 28px;
+      }
+      .portal-wrapper {
+        padding: 24px 16px 40px 16px;
+      }
+      .glass-header {
+        margin-bottom: 32px;
+        padding: 14px 20px;
+      }
+    }
+
+    /* Card kính lỏng xuyên thấu */
+    .glass-card {
+      position: relative;
+      background: var(--glass-surface);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      border: 1px solid var(--glass-border);
+      border-radius: 28px;
+      padding: 36px 32px;
+      box-shadow: var(--glass-shadow), inset 0 1.5px 2px var(--glass-highlight), inset 0 -1px 2px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 380px;
+      transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+                  border-color 0.28s ease,
+                  background-color 0.28s ease,
+                  box-shadow 0.28s ease;
+      overflow: hidden;
+    }
+
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    }
+
+    .glass-card:hover {
+      transform: translateY(-4px);
+      background: var(--glass-surface-hover);
+      border-color: var(--glass-border-hover);
+      box-shadow: 0 35px 70px -10px rgba(0, 0, 0, 0.65), inset 0 2px 2.5px rgba(255, 255, 255, 0.75);
+    }
+
+    /* Chi tiết thẻ */
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .card-icon-container {
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4);
+    }
+
+    .card-icon-container svg {
+      width: 26px;
+      height: 26px;
+      stroke-width: 1.6;
+    }
+
+    .status-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      padding: 6px 14px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .status-pending {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #fbbf24;
+    }
+
+    .status-pending .status-dot {
+      background: #f59e0b;
+      box-shadow: 0 0 8px #f59e0b;
+    }
+
+    .status-active {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #34d399;
+    }
+
+    .status-active .status-dot {
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+    }
+
+    .card-body {
+      margin-bottom: 32px;
+    }
+
+    .card-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .card-description {
+      font-size: 14.5px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    /* Các nút bấm chuẩn kính lỏng */
+    .card-action {
+      margin-top: auto;
+    }
+
+    .glass-btn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      height: 52px;
+      padding: 0 24px;
+      border-radius: 16px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-sizing: border-box;
+    }
+
+    .glass-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke-width: 2;
+      transition: transform 0.22s ease;
+    }
+
+    /* Nút kích hoạt mở Flasher */
+    .glass-btn-primary {
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.45) 0%, rgba(37, 99, 235, 0.5) 100%);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      box-shadow: 0 16px 32px rgba(2, 132, 199, 0.28), inset 0 1.5px 2px rgba(255, 255, 255, 0.7);
+    }
+
+    .glass-btn-primary:hover {
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.65) 0%, rgba(37, 99, 235, 0.7) 100%);
+      border-color: rgba(255, 255, 255, 0.75);
+      box-shadow: 0 20px 40px rgba(2, 132, 199, 0.38), inset 0 2px 2.5px rgba(255, 255, 255, 0.9);
+      transform: translateY(-2px);
+    }
+
+    .glass-btn-primary:hover svg {
+      transform: translateX(4px);
+    }
+
+    /* Nút DNF (chưa cho gì cả, để trạng thái chờ) */
+    .glass-btn-waiting {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-muted);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      cursor: default;
+    }
+
+    .glass-btn-waiting:hover {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Footer tối giản */
+    .portal-footer {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .footer-left {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    @media (max-width: 768px) {
+      .portal-footer {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Refractive Glow Background -->
+  <div class="ambient-glow">
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+    <div class="glow-orb glow-orb-3"></div>
+  </div>
+
+  <div class="portal-wrapper">
+
+    <!-- Top Floating Glass Navigation Header -->
+    <header class="glass-header">
+      <div class="brand-mark">
+        <div class="brand-logo-badge">
+          <!-- Vector Chip Glyph -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <rect x="4" y="4" width="16" height="16" rx="3" />
+            <rect x="9" y="9" width="6" height="6" />
+            <path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3" />
+          </svg>
+        </div>
+        <span class="brand-name">Duscu Portal</span>
+      </div>
+      <div class="brand-tag">v2.3 Core</div>
+    </header>
+
+    <!-- Main Title Section -->
+    <main>
+      <section class="hero-section">
+        <h1 class="hero-title">Kho Phân Phối Phần Mềm &amp; Thiết Bị</h1>
+        <p class="hero-subtitle">
+          Cổng truy cập chính thức dành cho các công cụ tối ưu hóa thiết bị di động và firmware phần cứng vi điều khiển.
+        </p>
+      </section>
+
+      <!-- 2 Main Cards: DNF New Version & ESP32 Flasher -->
+      <section class="portal-grid">
+
+        <!-- PART 1: PHIÊN BẢN MỚI CỦA DNF (CHƯA CHO GÌ CẢ) -->
+        <article class="glass-card">
+          <div>
+            <div class="card-head">
+              <div class="card-icon-container" style="color: #38bdf8;">
+                <!-- Vector Shield Device Glyph (No Emojis) -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  <path d="M9 12l2 2 4-4" />
+                </svg>
+              </div>
+              <div class="status-pill status-pending">
+                <span class="status-dot"></span>
+                <span>Chuẩn Bị Phát Hành</span>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <h2 class="card-title">Phiên Bản Mới Của DNF</h2>
+              <p class="card-description">
+                Bộ công cụ tối ưu hóa dịch vụ thông báo, hỗ trợ cài đặt Tiếng Việt hệ thống và duy trì kết nối nền liên tục cho Xiaomi HyperOS / MIUI.
+              </p>
+            </div>
+          </div>
+
+          <div class="card-action">
+            <!-- Nút chưa gắn link / chưa cho gì cả theo đúng chỉ đạo của Chủ tịch Thăng -->
+            <a href="javascript:void(0)" class="glass-btn glass-btn-waiting" onclick="showPendingNotice()">
+              <span>Phiên Bản Mới (Chưa Phát Hành)</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- PART 2: NẠP CODE ESP32 (DẪN ĐẾN DUSCU FLASHER) -->
+        <article class="glass-card">
+          <div>
+            <div class="card-head">
+              <div class="card-icon-container" style="color: #818cf8;">
+                <!-- Vector Microcontroller Chip Glyph (No Emojis) -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <rect x="5" y="5" width="14" height="14" rx="2" />
+                  <path d="M9 9h6v6H9z" />
+                  <path d="M5 9H2M5 12H2M5 15H2M19 9h3M19 12h3M19 15h3M9 5V2M12 5V2M15 5V2M9 19v3M12 19v3M15 19v3" />
+                </svg>
+              </div>
+              <div class="status-pill status-active">
+                <span class="status-dot"></span>
+                <span>Sẵn Sàng</span>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <h2 class="card-title">Nạp Code ESP32</h2>
+              <p class="card-description">
+                Công cụ nạp firmware chuyên dụng cho các dòng vi điều khiển ESP32, ESP32-S3, ESP32-C5 trực tiếp qua cổng Web Serial của trình duyệt.
+              </p>
+            </div>
+          </div>
+
+          <div class="card-action">
+            <!-- Dẫn thẳng đến Duscu Flasher chính thức -->
+            <a href="https://thang96memeff.github.io/firmware-bruce/" target="_blank" rel="noopener noreferrer" class="glass-btn glass-btn-primary">
+              <span>Mở Duscu Flasher</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <line x1="7" y1="17" x2="17" y2="7" />
+                <polyline points="7 7 17 7 17 17" />
+              </svg>
+            </a>
+          </div>
+        </article>
+
+      </section>
+    </main>
+
+  </div>
+
+  <!-- Minimal Footer -->
+  <footer class="portal-footer">
+    <div class="footer-left">DUSCU DISTRIBUTION SYSTEM</div>
+    <div class="footer-right">Bản quyền thuộc về Duscu</div>
+  </footer>
+
+  <script>
+    function showPendingNotice() {
+      alert("Phiên bản mới của DNF hiện đang trong kho chuẩn bị và sẽ sớm được cập nhật liên kết tải về.");
+    }
+  </script>
+
+</body>
+</html>
